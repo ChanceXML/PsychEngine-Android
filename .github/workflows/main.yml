@@ -41,15 +41,12 @@ jobs:
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
 
-      # Compile targeting android
       - name: Compile
         run: haxelib run lime build android --app-version="4.0.0-${{ github.run_id}}" -D officialBuild
 
-      # Publish the generated APK(s)
       - name: Publish Artifact
         uses: actions/upload-artifact@v4.3.4
         with:
           name: androidBuild
-          # This path captures the directory where Gradle outputs the final .apk files
           path: 'export/release/android/bin/app/build/outputs/apk'
           
