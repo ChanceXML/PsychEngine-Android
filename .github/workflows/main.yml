@@ -11,10 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
+      - name: Restore build cache
+        uses: actions/cache@v4
+        with:
+          key: android-build-cache
+          path: |
+            ~/.haxelib
+            ~/.hxcpp
+            export/release/android/obj
+            export/release/android/haxe
+
       - name: Install Linux build tools
         run: |
-         sudo apt-get update
-         sudo apt-get install -y build-essential clang
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang
 
       - name: Setup Java
         uses: actions/setup-java@v4
