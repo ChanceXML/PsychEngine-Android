@@ -6,10 +6,21 @@ on:
 
 jobs:
   buildAndroid:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4.1.7
+
+      - name: Install Linux build tools
+        run: |
+         sudo apt-get update
+         sudo apt-get install -y \
+         build-essential \
+         gcc \
+         g++ \
+         clang \
+         libc6-dev \
+         linux-libc-dev
 
       - name: Restore build cache
         uses: actions/cache@v4
@@ -21,18 +32,6 @@ jobs:
             export/release/android/obj
             export/release/android/haxe
 
-      - name: Install Linux build tools
-        run: |
-         sudo apt-get update
-         sudo apt-get install -y \
-         build-essential \
-         gcc \
-         g++ \
-         clang \
-         libc6-dev \
-         libc6-dev-amd64 \
-         linux-libc-dev
-      
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -42,14 +41,15 @@ jobs:
       - name: Setup Android
         uses: android-actions/setup-android@v2
 
-      - uses: krdlab/setup-haxe@master
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@master
         with:
           haxe-version: 4.3.4
 
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install hxcpp > /dev/null --quiet
+          haxelib install hxcpp --quiet
           chmod +x ./setup/unix.sh
           sh ./setup/unix.sh
 
@@ -73,7 +73,17 @@ jobs:
         run: haxelib run lime build android --app-version="4.0.0-${{ github.run_id}}" -D officialBuild
 
       - name: Publish Artifact
-        uses: actions/upload-artifact@v4.3.4
+        uses: actions/upload-artifact@v4
         with:
           name: androidBuild
           path: export/release/android/bin/app/build/outputs/apk
+
+      - name: Save build cache
+        uses: actions/cache@v4
+        with:
+          key: android-build-cache
+          path: |
+            ~/.haxelib
+            ~/.hxcpp
+            export/release/android/obj
+            export/release/android/haxe
