@@ -51,8 +51,8 @@ jobs:
       - name: Install Haxelib dependencies
         run: |
          haxelib setup ~/haxelib
-         haxelib install hxcpp --quiet
-         haxelib set hxcpp 4.3.2
+         haxelib install hxcpp 4.2.1 --quiet
+         haxelib set hxcpp 4.2.1
 
       - name: Run setup script
         run: |
