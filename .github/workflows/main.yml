@@ -50,10 +50,11 @@ jobs:
 
       - name: Install Haxelib dependencies
         run: |
-          haxelib setup ~/haxelib
-          haxelib install hxcpp 4.2.1 --quiet
-          chmod +x ./setup/unix.sh
-          sh ./setup/unix.sh
+         haxelib setup ~/haxelib
+         haxelib install hxcpp --quiet
+         haxelib run hxcpp setup
+         chmod +x ./setup/unix.sh
+         sh ./setup/unix.sh
 
       - name: Lime Setup Android
         run: |
