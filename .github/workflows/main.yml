@@ -28,9 +28,10 @@ jobs:
          build-essential \
          clang \
          g++ \
+         libc6-dev \
          libc++-dev \
          libc++abi-dev
-
+      
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
