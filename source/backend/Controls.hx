@@ -35,6 +35,21 @@ class Controls
 	private function get_NOTE_LEFT_P() return justPressed('note_left');
 	private function get_NOTE_RIGHT_P() return justPressed('note_right');
 
+	public static var LEFT:Bool = false;
+    public static var DOWN:Bool = false;
+    public static var UP:Bool = false;
+    public static var RIGHT:Bool = false;
+
+    public static var LEFT_JP:Bool = false;
+    public static var DOWN_JP:Bool = false;
+    public static var UP_JP:Bool = false;
+    public static var RIGHT_JP:Bool = false;
+
+    public static var LEFT_JR:Bool = false;
+    public static var DOWN_JR:Bool = false;
+    public static var UP_JR:Bool = false;
+    public static var RIGHT_JR:Bool = false;
+
 	// Held buttons (directions)
 	public var UI_UP(get, never):Bool;
 	public var UI_DOWN(get, never):Bool;
@@ -85,17 +100,49 @@ class Controls
 	//Gamepad & Keyboard stuff
 	public var keyboardBinds:Map<String, Array<FlxKey>>;
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
-	public function justPressed(key:String)
-	{
-		var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
-		if(result) controllerMode = false;
+	
+    public function justPressed(key:String)
+{
+    var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
+
+    #if mobile
+    if(!result)
+    {
+        switch(key)
+        {
+            case "note_left": result = MobileHitbox.LEFT_JP;
+            case "note_down": result = MobileHitbox.DOWN_JP;
+            case "note_up": result = MobileHitbox.UP_JP;
+            case "note_right": result = MobileHitbox.RIGHT_JP;
+        }
+    }
+    #end
+	    if(result) controllerMode = false;
 
 		return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
 	}
+	
+    public function pressed(key:String)
+{
+    var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
 
-	public function pressed(key:String)
-	{
-		var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
+    #if mobile
+    if(!result)
+    {
+        switch(key)
+        {
+            case "note_left": result = MobileHitbox.LEFT;
+            case "note_down": result = MobileHitbox.DOWN;
+            case "note_up": result = MobileHitbox.UP;
+            case "note_right": result = MobileHitbox.RIGHT;
+        }
+    }
+    #end
+
+    if(result) controllerMode = false;
+
+    return result || _myGamepadPressed(gamepadBinds[key]) == true;
+}
 		if(result) controllerMode = false;
 
 		return result || _myGamepadPressed(gamepadBinds[key]) == true;
@@ -103,7 +150,18 @@ class Controls
 
 	public function justReleased(key:String)
 	{
-		var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
+		#if mobile
+        if(!result)
+      {
+    switch(key)
+    {
+        case "note_left": result = MobileHitbox.LEFT_JR;
+        case "note_down": result = MobileHitbox.DOWN_JR;
+        case "note_up": result = MobileHitbox.UP_JR;
+        case "note_right": result = MobileHitbox.RIGHT_JR;
+      }
+     }
+     #end
 		if(result) controllerMode = false;
 
 		return result || _myGamepadJustReleased(gamepadBinds[key]) == true;
