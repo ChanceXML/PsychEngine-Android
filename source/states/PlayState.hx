@@ -127,7 +127,7 @@ class PlayState extends MusicBeatState
 	public static var stageUI(default, set):String = "normal";
 	public static var uiPrefix:String = "";
 	public static var uiPostfix:String = "";
-	public static var isPixelStage(get, never):Bool;  cc
+	public static var isPixelStage(get, never):Bool;
 
 	@:noCompletion
 	static function set_stageUI(value:String):String
