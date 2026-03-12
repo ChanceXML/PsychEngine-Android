@@ -421,15 +421,15 @@ class PlayState extends MusicBeatState
         hitbox = new HitBox();
         add(hitbox);
 
-		hitbox.buttonLeft.onDown.callback = function() { controls.NOTE_LEFT_P = true; };
-        hitbox.buttonDown.onDown.callback = function() { controls.NOTE_DOWN_P = true; };
-        hitbox.buttonUp.onDown.callback = function() { controls.NOTE_UP_P = true; };
-        hitbox.buttonRight.onDown.callback = function() { controls.NOTE_RIGHT_P = true; };
+		hitbox.buttonLeft.onDown.callback = function() { FlxG.keys.press("LEFT"); };
+        hitbox.buttonDown.onDown.callback = function() { FlxG.keys.press("DOWN"); };
+        hitbox.buttonUp.onDown.callback = function() { FlxG.keys.press("UP"); };
+        hitbox.buttonRight.onDown.callback = function() { FlxG.keys.press("RIGHT"); };
 
-        hitbox.buttonLeft.onUp.callback = function() { controls.NOTE_LEFT_P = false; };
-        hitbox.buttonDown.onUp.callback = function() { controls.NOTE_DOWN_P = false; };
-        hitbox.buttonUp.onUp.callback = function() { controls.NOTE_UP_P = false; };
-        hitbox.buttonRight.onUp.callback = function() { controls.NOTE_RIGHT_P = false; };
+        hitbox.buttonLeft.onUp.callback = function() { FlxG.keys.release("LEFT"); };
+        hitbox.buttonDown.onUp.callback = function() { FlxG.keys.release("DOWN"); };
+        hitbox.buttonUp.onUp.callback = function() { FlxG.keys.release("UP"); };
+        hitbox.buttonRight.onUp.callback = function() { FlxG.keys.release("RIGHT"); };
 
         hitbox.buttonLeft.onOut.callback = hitbox.buttonLeft.onUp.callback;
         hitbox.buttonDown.onOut.callback = hitbox.buttonDown.onUp.callback;
