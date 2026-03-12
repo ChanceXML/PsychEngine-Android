@@ -3,7 +3,7 @@ package mobile.controls;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import flixel.ui.FlxButton;
-import openfl.ui.Keyboard;
+import backend.Controls;
 
 class MobileHitbox extends FlxSpriteGroup
 {
@@ -16,7 +16,7 @@ class MobileHitbox extends FlxSpriteGroup
     {
         super();
 
-        var w = Std.int(FlxG.width / 4);
+        var w:Int = Std.int(FlxG.width / 4);
 
         buttonLeft = createZone(0 * w);
         buttonDown = createZone(1 * w);
@@ -42,30 +42,80 @@ class MobileHitbox extends FlxSpriteGroup
 
     function setupCallbacks()
     {
-        buttonLeft.onDown.callback = function() pressKey(Keyboard.LEFT);
-        buttonLeft.onUp.callback = function() releaseKey(Keyboard.LEFT);
+        // LEFT
+        buttonLeft.onDown.callback = function()
+        {
+            Controls.LEFT = true;
+            Controls.LEFT_JP = true;
+        };
+
+        buttonLeft.onUp.callback = function()
+        {
+            Controls.LEFT = false;
+            Controls.LEFT_JR = true;
+        };
+
         buttonLeft.onOut.callback = buttonLeft.onUp.callback;
 
-        buttonDown.onDown.callback = function() pressKey(Keyboard.DOWN);
-        buttonDown.onUp.callback = function() releaseKey(Keyboard.DOWN);
+        // DOWN
+        buttonDown.onDown.callback = function()
+        {
+            Controls.DOWN = true;
+            Controls.DOWN_JP = true;
+        };
+
+        buttonDown.onUp.callback = function()
+        {
+            Controls.DOWN = false;
+            Controls.DOWN_JR = true;
+        };
+
         buttonDown.onOut.callback = buttonDown.onUp.callback;
 
-        buttonUp.onDown.callback = function() pressKey(Keyboard.UP);
-        buttonUp.onUp.callback = function() releaseKey(Keyboard.UP);
+        // UP
+        buttonUp.onDown.callback = function()
+        {
+            Controls.UP = true;
+            Controls.UP_JP = true;
+        };
+
+        buttonUp.onUp.callback = function()
+        {
+            Controls.UP = false;
+            Controls.UP_JR = true;
+        };
+
         buttonUp.onOut.callback = buttonUp.onUp.callback;
 
-        buttonRight.onDown.callback = function() pressKey(Keyboard.RIGHT);
-        buttonRight.onUp.callback = function() releaseKey(Keyboard.RIGHT);
+        // RIGHT
+        buttonRight.onDown.callback = function()
+        {
+            Controls.RIGHT = true;
+            Controls.RIGHT_JP = true;
+        };
+
+        buttonRight.onUp.callback = function()
+        {
+            Controls.RIGHT = false;
+            Controls.RIGHT_JR = true;
+        };
+
         buttonRight.onOut.callback = buttonRight.onUp.callback;
     }
 
-    function pressKey(key:Int)
+    override function update(elapsed:Float)
     {
-        FlxG.keys._keyList[key].current = 2;
-    }
+        super.update(elapsed);
 
-    function releaseKey(key:Int)
-    {
-        FlxG.keys._keyList[key].current = 0;
+        // reset just pressed / released every frame
+        Controls.LEFT_JP = false;
+        Controls.DOWN_JP = false;
+        Controls.UP_JP = false;
+        Controls.RIGHT_JP = false;
+
+        Controls.LEFT_JR = false;
+        Controls.DOWN_JR = false;
+        Controls.UP_JR = false;
+        Controls.RIGHT_JR = false;
     }
 }
