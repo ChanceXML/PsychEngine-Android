@@ -415,26 +415,11 @@ class PlayState extends MusicBeatState
 		boyfriend = new Character(0, 0, SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
-
-		var hitbox:HitBox;
-
-        hitbox = new HitBox();
+ 
+        #if mobile
+        hitbox = new MobileHitbox();
         add(hitbox);
-
-		hitbox.buttonLeft.onDown.callback = function() { FlxG.keys.press("LEFT"); };
-        hitbox.buttonDown.onDown.callback = function() { FlxG.keys.press("DOWN"); };
-        hitbox.buttonUp.onDown.callback = function() { FlxG.keys.press("UP"); };
-        hitbox.buttonRight.onDown.callback = function() { FlxG.keys.press("RIGHT"); };
-
-        hitbox.buttonLeft.onUp.callback = function() { FlxG.keys.release("LEFT"); };
-        hitbox.buttonDown.onUp.callback = function() { FlxG.keys.release("DOWN"); };
-        hitbox.buttonUp.onUp.callback = function() { FlxG.keys.release("UP"); };
-        hitbox.buttonRight.onUp.callback = function() { FlxG.keys.release("RIGHT"); };
-
-        hitbox.buttonLeft.onOut.callback = hitbox.buttonLeft.onUp.callback;
-        hitbox.buttonDown.onOut.callback = hitbox.buttonDown.onUp.callback;
-        hitbox.buttonUp.onOut.callback = hitbox.buttonUp.onUp.callback;
-        hitbox.buttonRight.onOut.callback = hitbox.buttonRight.onUp.callback;
+        #end
 		
 		if(stageData.objects != null && stageData.objects.length > 0)
 		{
