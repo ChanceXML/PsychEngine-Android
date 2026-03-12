@@ -7,6 +7,9 @@ import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import options.Option:
+// adding these just in case
+import options.AndroidSettingsSubState;
+import options.OptionsState;
 
 typedef HitboxCallback = {
     var callback:Void->Void;
@@ -102,7 +105,7 @@ class HitboxButton extends FlxSprite {
         }
 
         if (Options.hitboxHints) {
-            alpha = isPressed ? Options.hitboxOpacity : 0.00001;
+            alpha = isPressed ? ClientPrefs.data.hitboxOpacity : 0.00001;
         } else {
             alpha = 0.00001;
         }
