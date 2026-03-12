@@ -85,59 +85,29 @@ class Controls
 	//Gamepad & Keyboard stuff
 	public var keyboardBinds:Map<String, Array<FlxKey>>;
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
-	
-    public function justPressed(key:String)
-{
-    var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
+	public function justPressed(key:String)
+	{
+		var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
+		if(result) controllerMode = false;
 
-    if(result) controllerMode = false;
+		return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
+	}
 
-    return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
-}
-	
-    public function pressed(key:String)
-{
-    var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
+	public function pressed(key:String)
+	{
+		var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
+		if(result) controllerMode = false;
 
-    #if mobile
-    if(!result)
-    {
-        switch(key)
-        {
-            case "note_left": result = MobileHitbox.LEFT;
-            case "note_down": result = MobileHitbox.DOWN;
-            case "note_up": result = MobileHitbox.UP;
-            case "note_right": result = MobileHitbox.RIGHT;
-        }
-    }
-    #end
-
-    if(result) controllerMode = false;
-
-    return result || _myGamepadPressed(gamepadBinds[key]) == true;
-}
+		return result || _myGamepadPressed(gamepadBinds[key]) == true;
+	}
 
 	public function justReleased(key:String)
-{
-    var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
+	{
+		var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
+		if(result) controllerMode = false;
 
-    #if mobile
-    if(!result)
-    {
-        switch(key)
-        {
-            case "note_left": result = MobileHitbox.LEFT_JR;
-            case "note_down": result = MobileHitbox.DOWN_JR;
-            case "note_up": result = MobileHitbox.UP_JR;
-            case "note_right": result = MobileHitbox.RIGHT_JR;
-        }
-    }
-    #end
-
-    if(result) controllerMode = false;
-
-    return result || _myGamepadJustReleased(gamepadBinds[key]) == true;
-}
+		return result || _myGamepadJustReleased(gamepadBinds[key]) == true;
+	}
 
 	public var controllerMode:Bool = false;
 	private function _myGamepadJustPressed(keys:Array<FlxGamepadInputID>):Bool
