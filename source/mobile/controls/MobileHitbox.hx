@@ -12,6 +12,21 @@ class MobileHitbox extends FlxSpriteGroup
     var buttonUp:FlxButton;
     var buttonRight:FlxButton;
 
+    public static var LEFT:Bool = false;
+    public static var DOWN:Bool = false;
+    public static var UP:Bool = false;
+    public static var RIGHT:Bool = false;
+
+    public static var LEFT_JP:Bool = false;
+    public static var DOWN_JP:Bool = false;
+    public static var UP_JP:Bool = false;
+    public static var RIGHT_JP:Bool = false;
+
+    public static var LEFT_JR:Bool = false;
+    public static var DOWN_JR:Bool = false;
+    public static var UP_JR:Bool = false;
+    public static var RIGHT_JR:Bool = false;
+
     public function new()
     {
         super();
