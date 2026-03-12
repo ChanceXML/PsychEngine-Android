@@ -421,15 +421,15 @@ class PlayState extends MusicBeatState
         hitbox = new HitBox();
         add(hitbox);
 
-		hitbox.buttonLeft.onDown.callback = function() { triggerKey(LEFT, true); };
-        hitbox.buttonDown.onDown.callback = function() { triggerKey(DOWN, true); };
-        hitbox.buttonUp.onDown.callback = function() { triggerKey(UP, true); };
-        hitbox.buttonRight.onDown.callback = function() { triggerKey(RIGHT, true); };
+		hitbox.buttonLeft.onDown.callback = function() { controls.NOTE_LEFT_P = true; };
+        hitbox.buttonDown.onDown.callback = function() { controls.NOTE_DOWN_P = true; };
+        hitbox.buttonUp.onDown.callback = function() { controls.NOTE_UP_P = true; };
+        hitbox.buttonRight.onDown.callback = function() { controls.NOTE_RIGHT_P = true; };
 
-        hitbox.buttonLeft.onUp.callback = function() { triggerKey(LEFT, false); };
-        hitbox.buttonDown.onUp.callback = function() { triggerKey(DOWN, false); };
-        hitbox.buttonUp.onUp.callback = function() { triggerKey(UP, false); };
-        hitbox.buttonRight.onUp.callback = function() { triggerKey(RIGHT, false); };
+        hitbox.buttonLeft.onUp.callback = function() { controls.NOTE_LEFT_P = false; };
+        hitbox.buttonDown.onUp.callback = function() { controls.NOTE_DOWN_P = false; };
+        hitbox.buttonUp.onUp.callback = function() { controls.NOTE_UP_P = false; };
+        hitbox.buttonRight.onUp.callback = function() { controls.NOTE_RIGHT_P = false; };
 
         hitbox.buttonLeft.onOut.callback = hitbox.buttonLeft.onUp.callback;
         hitbox.buttonDown.onOut.callback = hitbox.buttonDown.onUp.callback;
