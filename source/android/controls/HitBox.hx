@@ -104,10 +104,10 @@ class HitboxButton extends FlxSprite {
             if (onOut.callback != null) onOut.callback();
         }
 
-            alpha = isPressed ? ClientPrefs.data.hitboxOpacity : 0.00001;
-        } else {
-            alpha = 0.00001;
-        }
+        alpha = isPressed ? ClientPrefs.data.hitboxOpacity : 0.00001;
+      } else {
+        alpha = 0.00001;
+      }
 
         super.update(elapsed);
     }
