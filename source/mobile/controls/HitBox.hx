@@ -6,7 +6,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
-import funkin.options.Options;
+import options.Option;
 
 typedef HitboxCallback = {
     var callback:Void->Void;
