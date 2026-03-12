@@ -1,4 +1,4 @@
-package mobile.controls;
+package android.controls;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
