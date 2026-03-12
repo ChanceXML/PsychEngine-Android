@@ -18,7 +18,6 @@ import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.KeyboardEvent;
 import haxe.Json;
-import mobile.controls.MobileHitbox;
 
 import cutscenes.DialogueBoxPsych;
 
@@ -54,6 +53,10 @@ import psychlua.HScript.HScriptInfos;
 import crowplexus.iris.Iris;
 import crowplexus.hscript.Expr.Error as IrisError;
 import crowplexus.hscript.Printer;
+#end
+// android stuff woohoo
+#if android
+import android.controls.HitBox;
 #end
 
 /**
@@ -92,6 +95,8 @@ class PlayState extends MusicBeatState
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
+    // my android var
+	public var hitbox:HitBox;
 
 	public var boyfriendMap:Map<String, Character> = new Map<String, Character>();
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
@@ -122,7 +127,7 @@ class PlayState extends MusicBeatState
 	public static var stageUI(default, set):String = "normal";
 	public static var uiPrefix:String = "";
 	public static var uiPostfix:String = "";
-	public static var isPixelStage(get, never):Bool;
+	public static var isPixelStage(get, never):Bool;  cc
 
 	@:noCompletion
 	static function set_stageUI(value:String):String
@@ -267,6 +272,14 @@ class PlayState extends MusicBeatState
 
 	private static var _lastLoadedModDirectory:String = '';
 	public static var nextReloadAll:Bool = false;
+
+	function triggerKey(key:FlxKey, pressed:Bool) {
+    var event = new KeyboardEvent(pressed ? KeyboardEvent.KEY_DOWN : KeyboardEvent.KEY_UP, true, true, 0, key);
+    if (pressed)
+        Reflect.callMethod(FlxG.keys, Reflect.field(FlxG.keys, "onKeyDown"), [event]);
+    else
+        Reflect.callMethod(FlxG.keys, Reflect.field(FlxG.keys, "onKeyUp"), [event]);
+	}
 	override public function create()
 	{
 		//trace('Playback Rate: ' + playbackRate);
@@ -297,6 +310,25 @@ class PlayState extends MusicBeatState
 
 		if(FlxG.sound.music != null)
 			FlxG.sound.music.stop();
+        // hitbox
+		hitbox = new HitBox();
+        add(hitbox);
+		hitbox.setupCamera();
+		
+        hitbox.buttonLeft.onDown.callback = function() { triggerKey(LEFT, true); };
+        hitbox.buttonDown.onDown.callback = function() { triggerKey(DOWN, true); };
+        hitbox.buttonUp.onDown.callback = function() { triggerKey(UP, true); };
+        hitbox.buttonRight.onDown.callback = function() { triggerKey(RIGHT, true); };
+
+        hitbox.buttonLeft.onUp.callback = function() { triggerKey(LEFT, false); };
+        hitbox.buttonDown.onUp.callback = function() { triggerKey(DOWN, false); };
+        hitbox.buttonUp.onUp.callback = function() { triggerKey(UP, false); };
+        hitbox.buttonRight.onUp.callback = function() { triggerKey(RIGHT, false); };
+
+        hitbox.buttonLeft.onOut.callback = hitbox.buttonLeft.onUp.callback;
+        hitbox.buttonDown.onOut.callback = hitbox.buttonDown.onUp.callback;
+        hitbox.buttonUp.onOut.callback = hitbox.buttonUp.onUp.callback;
+        hitbox.buttonRight.onOut.callback = hitbox.buttonRight.onUp.callback;
 
 		// Gameplay settings
 		healthGain = ClientPrefs.getGameplaySetting('healthgain');
@@ -415,13 +447,6 @@ class PlayState extends MusicBeatState
 		boyfriend = new Character(0, 0, SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
-
-		var hitbox:MobileHitbox;
- 
-        #if mobile
-        hitbox = new MobileHitbox();
-        add(hitbox);
-        #end
 		
 		if(stageData.objects != null && stageData.objects.length > 0)
 		{
