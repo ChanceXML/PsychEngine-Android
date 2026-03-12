@@ -4,6 +4,9 @@ import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.gamepad.mappings.FlxGamepadMapping;
 import flixel.input.keyboard.FlxKey;
+#if mobile
+import mobile.controls.MobileHitbox;
+#end
 
 class Controls
 {
@@ -117,10 +120,11 @@ class Controls
         }
     }
     #end
-	    if(result) controllerMode = false;
 
-		return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
-	}
+    if(result) controllerMode = false;
+
+    return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
+}
 	
     public function pressed(key:String)
 {
@@ -143,29 +147,28 @@ class Controls
 
     return result || _myGamepadPressed(gamepadBinds[key]) == true;
 }
-		if(result) controllerMode = false;
-
-		return result || _myGamepadPressed(gamepadBinds[key]) == true;
-	}
 
 	public function justReleased(key:String)
-	{
-		#if mobile
-        if(!result)
-      {
-    switch(key)
-    {
-        case "note_left": result = MobileHitbox.LEFT_JR;
-        case "note_down": result = MobileHitbox.DOWN_JR;
-        case "note_up": result = MobileHitbox.UP_JR;
-        case "note_right": result = MobileHitbox.RIGHT_JR;
-      }
-     }
-     #end
-		if(result) controllerMode = false;
+{
+    var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
 
-		return result || _myGamepadJustReleased(gamepadBinds[key]) == true;
-	}
+    #if mobile
+    if(!result)
+    {
+        switch(key)
+        {
+            case "note_left": result = MobileHitbox.LEFT_JR;
+            case "note_down": result = MobileHitbox.DOWN_JR;
+            case "note_up": result = MobileHitbox.UP_JR;
+            case "note_right": result = MobileHitbox.RIGHT_JR;
+        }
+    }
+    #end
+
+    if(result) controllerMode = false;
+
+    return result || _myGamepadJustReleased(gamepadBinds[key]) == true;
+}
 
 	public var controllerMode:Bool = false;
 	private function _myGamepadJustPressed(keys:Array<FlxGamepadInputID>):Bool
