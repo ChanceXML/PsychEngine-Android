@@ -40,6 +40,8 @@ import objects.Note.EventNote;
 import objects.*;
 import states.stages.*;
 import states.stages.objects.*;
+import mobile.controls.HitBox;
+import openfl.events.KeyboardEvent;
 
 #if LUA_ALLOWED
 import psychlua.*;
@@ -414,6 +416,25 @@ class PlayState extends MusicBeatState
 		boyfriend = new Character(0, 0, SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
+
+		hitbox = new HitBox();
+        add(hitbox);
+		hitbox.setupCamera();
+		
+        hitbox.buttonLeft.onDown.callback = function() { triggerKey(LEFT, true); };
+        hitbox.buttonDown.onDown.callback = function() { triggerKey(DOWN, true); };
+        hitbox.buttonUp.onDown.callback = function() { triggerKey(UP, true); };
+        hitbox.buttonRight.onDown.callback = function() { triggerKey(RIGHT, true); };
+
+        hitbox.buttonLeft.onUp.callback = function() { triggerKey(LEFT, false); };
+        hitbox.buttonDown.onUp.callback = function() { triggerKey(DOWN, false); };
+        hitbox.buttonUp.onUp.callback = function() { triggerKey(UP, false); };
+        hitbox.buttonRight.onUp.callback = function() { triggerKey(RIGHT, false); };
+
+        hitbox.buttonLeft.onOut.callback = hitbox.buttonLeft.onUp.callback;
+        hitbox.buttonDown.onOut.callback = hitbox.buttonDown.onUp.callback;
+        hitbox.buttonUp.onOut.callback = hitbox.buttonUp.onUp.callback;
+        hitbox.buttonRight.onOut.callback = hitbox.buttonRight.onUp.callback;
 		
 		if(stageData.objects != null && stageData.objects.length > 0)
 		{
