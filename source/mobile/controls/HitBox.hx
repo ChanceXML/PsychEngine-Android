@@ -4,16 +4,18 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
+import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 
-import backend.ClientPrefs;
-
-typedef HitboxCallback = {
+typedef HitboxCallback =
+{
     var callback:Void->Void;
 }
 
 class HitBox extends FlxSpriteGroup
 {
+    public var hitboxCamera:FlxCamera;
+
     public var buttonLeft:HitboxButton;
     public var buttonDown:HitboxButton;
     public var buttonUp:HitboxButton;
@@ -26,6 +28,12 @@ class HitBox extends FlxSpriteGroup
         var w:Int = Std.int(FlxG.width / 4);
         var h:Int = Std.int(FlxG.height);
 
+        hitboxCamera = new FlxCamera();
+        hitboxCamera.bgColor = 0;
+        hitboxCamera.zoom = 1;
+
+        FlxG.cameras.add(hitboxCamera, false);
+
         buttonLeft = new HitboxButton(0, 0, w, h, 0xFFC24B99);
         buttonDown = new HitboxButton(w, 0, w, h, 0xFF00FFFF);
         buttonUp = new HitboxButton(w * 2, 0, w, h, 0xFF12FA05);
@@ -36,21 +44,18 @@ class HitBox extends FlxSpriteGroup
         add(buttonUp);
         add(buttonRight);
 
-        for (button in [buttonLeft, buttonDown, buttonUp, buttonRight])
-        {
-            button.scrollFactor.set();
-        }
-
-        scrollFactor.set();
+        cameras = [hitboxCamera];
+        scrollFactor.set(0, 0);
     }
 
-    public static function BACK():Bool
+    override public function destroy():Void
     {
-        #if android
-        return FlxG.android.justReleased.BACK;
-        #else
-        return false;
-        #end
+        super.destroy();
+
+        if (FlxG.cameras.list.contains(hitboxCamera))
+            FlxG.cameras.remove(hitboxCamera);
+
+        hitboxCamera = null;
     }
 }
 
@@ -61,40 +66,35 @@ class HitboxButton extends FlxSprite
     public var onOut:HitboxCallback = {callback: null};
 
     public var isPressed:Bool = false;
-    private var _wasPressed:Bool = false;
+    private var wasPressed:Bool = false;
 
-    private var _touchPoint:FlxPoint = new FlxPoint();
+    private var touchPoint:FlxPoint = new FlxPoint();
 
-    public function new(x:Float, y:Float, width:Int, height:Int, color:FlxColor)
+    public function new(x:Float, y:Float, w:Int, h:Int, color:FlxColor)
     {
         super(x, y);
 
-        makeGraphic(width, height, color);
+        makeGraphic(w, h, color);
         alpha = 0.00001;
         antialiasing = false;
     }
 
     override public function update(elapsed:Float)
     {
-        _wasPressed = isPressed;
+        wasPressed = isPressed;
         isPressed = false;
 
         checkInputs();
 
-        if (isPressed && !_wasPressed)
+        if (isPressed && !wasPressed)
         {
             if (onDown.callback != null) onDown.callback();
         }
-        else if (!isPressed && _wasPressed)
+        else if (!isPressed && wasPressed)
         {
             if (onUp.callback != null) onUp.callback();
             if (onOut.callback != null) onOut.callback();
         }
-
-        if (ClientPrefs.data.hitboxHints)
-            alpha = isPressed ? ClientPrefs.data.hitboxOpacity : 0.00001;
-        else
-            alpha = 0.00001;
 
         super.update(elapsed);
     }
@@ -104,8 +104,9 @@ class HitboxButton extends FlxSprite
         #if FLX_TOUCH
         for (touch in FlxG.touches.list)
         {
-            touch.getWorldPosition(null, _touchPoint);
-            if (overlapsPoint(_touchPoint))
+            touch.getWorldPosition(cameras[0], touchPoint);
+
+            if (overlapsPoint(touchPoint))
             {
                 isPressed = true;
                 return;
@@ -116,8 +117,9 @@ class HitboxButton extends FlxSprite
         #if FLX_MOUSE
         if (FlxG.mouse.pressed)
         {
-            FlxG.mouse.getWorldPosition(null, _touchPoint);
-            if (overlapsPoint(_touchPoint))
+            FlxG.mouse.getWorldPosition(cameras[0], touchPoint);
+
+            if (overlapsPoint(touchPoint))
                 isPressed = true;
         }
         #end
@@ -125,7 +127,7 @@ class HitboxButton extends FlxSprite
 
     override public function destroy():Void
     {
-        _touchPoint = null;
+        touchPoint = null;
         super.destroy();
     }
 }
