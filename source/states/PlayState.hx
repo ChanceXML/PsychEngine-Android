@@ -416,9 +416,9 @@ class PlayState extends MusicBeatState
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
 
-		var hitbox:mobile.HitBox;
+		var hitbox:HitBox;
 
-        hitbox = new mobile.HitBox();
+        hitbox = new HitBox();
         add(hitbox);
 
 		hitbox.buttonLeft.onDown.callback = function() { triggerKey(LEFT, true); };
