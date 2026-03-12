@@ -18,6 +18,7 @@ import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.KeyboardEvent;
 import haxe.Json;
+import mobile.controls.HitBox;
 
 import cutscenes.DialogueBoxPsych;
 
@@ -40,8 +41,6 @@ import objects.Note.EventNote;
 import objects.*;
 import states.stages.*;
 import states.stages.objects.*;
-import mobile.controls.HitBox;
-import openfl.events.KeyboardEvent;
 
 #if LUA_ALLOWED
 import psychlua.*;
