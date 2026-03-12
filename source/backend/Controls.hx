@@ -4,9 +4,6 @@ import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.gamepad.mappings.FlxGamepadMapping;
 import flixel.input.keyboard.FlxKey;
-#if mobile
-import mobile.controls.MobileHitbox;
-#end
 
 class Controls
 {
@@ -37,21 +34,6 @@ class Controls
 	private function get_NOTE_DOWN_P() return justPressed('note_down');
 	private function get_NOTE_LEFT_P() return justPressed('note_left');
 	private function get_NOTE_RIGHT_P() return justPressed('note_right');
-
-	public static var LEFT:Bool = false;
-    public static var DOWN:Bool = false;
-    public static var UP:Bool = false;
-    public static var RIGHT:Bool = false;
-
-    public static var LEFT_JP:Bool = false;
-    public static var DOWN_JP:Bool = false;
-    public static var UP_JP:Bool = false;
-    public static var RIGHT_JP:Bool = false;
-
-    public static var LEFT_JR:Bool = false;
-    public static var DOWN_JR:Bool = false;
-    public static var UP_JR:Bool = false;
-    public static var RIGHT_JR:Bool = false;
 
 	// Held buttons (directions)
 	public var UI_UP(get, never):Bool;
