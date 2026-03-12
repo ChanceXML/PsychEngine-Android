@@ -90,19 +90,6 @@ class Controls
 {
     var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
 
-    #if mobile
-    if(!result)
-    {
-        switch(key)
-        {
-            case "note_left": result = MobileHitbox.LEFT_JP;
-            case "note_down": result = MobileHitbox.DOWN_JP;
-            case "note_up": result = MobileHitbox.UP_JP;
-            case "note_right": result = MobileHitbox.RIGHT_JP;
-        }
-    }
-    #end
-
     if(result) controllerMode = false;
 
     return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
