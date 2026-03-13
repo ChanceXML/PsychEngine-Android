@@ -1,7 +1,13 @@
-name: Build Android
+name: Android Build
+run-name: Build ${{ github.event.inputs.name }}
 
 on:
   workflow_dispatch:
+    inputs:
+      name:
+        description: "Build Name"
+        required: true
+        default: "Android Build"
 
 jobs:
   buildAndroid:
