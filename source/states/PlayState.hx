@@ -312,9 +312,9 @@ class PlayState extends MusicBeatState
 			FlxG.sound.music.stop();
         // hitbox
 		hitbox = new HitBox();
+        hitbox.setupCamera();
         add(hitbox);
-		hitbox.setupCamera();
-		
+
         hitbox.buttonLeft.onDown.callback = function() { triggerKey(LEFT, true); };
         hitbox.buttonDown.onDown.callback = function() { triggerKey(DOWN, true); };
         hitbox.buttonUp.onDown.callback = function() { triggerKey(UP, true); };
@@ -325,11 +325,11 @@ class PlayState extends MusicBeatState
         hitbox.buttonUp.onUp.callback = function() { triggerKey(UP, false); };
         hitbox.buttonRight.onUp.callback = function() { triggerKey(RIGHT, false); };
 
-        hitbox.buttonLeft.onOut.callback = hitbox.buttonLeft.onUp.callback;
-        hitbox.buttonDown.onOut.callback = hitbox.buttonDown.onUp.callback;
-        hitbox.buttonUp.onOut.callback = hitbox.buttonUp.onUp.callback;
-        hitbox.buttonRight.onOut.callback = hitbox.buttonRight.onUp.callback;
-
+        hitbox.buttonLeft.onOut.callback = function() { triggerKey(LEFT, false); };
+        hitbox.buttonDown.onOut.callback = function() { triggerKey(DOWN, false); };
+        hitbox.buttonUp.onOut.callback = function() { triggerKey(UP, false); };
+        hitbox.buttonRight.onOut.callback = function() { triggerKey(RIGHT, false); };
+		
 		// Gameplay settings
 		healthGain = ClientPrefs.getGameplaySetting('healthgain');
 		healthLoss = ClientPrefs.getGameplaySetting('healthloss');
