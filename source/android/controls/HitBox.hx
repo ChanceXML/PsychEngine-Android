@@ -7,6 +7,7 @@ import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 import options.Option;
+import backend.ClientPrefs;
 // adding these just in case
 import options.AndroidSettingsSubState;
 import options.OptionsState;
