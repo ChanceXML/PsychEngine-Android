@@ -105,31 +105,46 @@ class HitboxButton extends FlxSprite {
             if (onOut.callback != null) onOut.callback();
         }
 
-        alpha = isPressed ? ClientPrefs.data.hitboxOpacity : 0.00001;
+        var opacity:Float = 0.3;
+        if (ClientPrefs.data != null)
+        opacity = ClientPrefs.data.hitboxOpacity;
+        alpha = isPressed ? opacity : 0.00001;
 
         super.update(elapsed);
     }
 
-    private function checkInputs():Void {
-        #if FLX_TOUCH
-        for (touch in FlxG.touches.list) {
-            touch.getWorldPosition(_assignedCamera, _touchPoint);
-            if (overlapPointCheck(_touchPoint)) {
-                isPressed = true;
-                return;
-            }
-        }
-        #end
+    private function checkInputs():Void
+{
+    if (_assignedCamera == null) return;
+    if (!FlxG.cameras.list.contains(_assignedCamera)) return;
 
-        #if FLX_MOUSE
-        if (FlxG.mouse.pressed) {
-            FlxG.mouse.getWorldPosition(_assignedCamera, _touchPoint);
-            if (overlapPointCheck(_touchPoint)) {
-                isPressed = true;
-            }
+    #if FLX_TOUCH
+    for (touch in FlxG.touches.list)
+    {
+        if (touch == null) continue;
+
+        touch.getWorldPosition(_assignedCamera, _touchPoint);
+
+        if (overlapPointCheck(_touchPoint))
+        {
+            isPressed = true;
+            return;
         }
-        #end
     }
+    #end
+
+    #if FLX_MOUSE
+    if (FlxG.mouse != null && FlxG.mouse.pressed)
+    {
+        FlxG.mouse.getWorldPosition(_assignedCamera, _touchPoint);
+
+        if (overlapPointCheck(_touchPoint))
+        {
+            isPressed = true;
+        }
+    }
+    #end
+}
 
     private function overlapPointCheck(point:FlxPoint):Bool {
         var left:Float = x;
@@ -144,7 +159,7 @@ class HitboxButton extends FlxSprite {
     }
 
     override public function destroy():Void {
-        _touchPoint = null;
+        _touchPoint.put();
         super.destroy();
     }
 }
