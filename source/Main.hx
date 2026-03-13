@@ -2,6 +2,7 @@ package;
 
 #if android
 import extension.androidtools.content.Context;
+import android.utils.CrashHandler;
 #end
 
 import debug.FPSCounter;
@@ -73,6 +74,10 @@ class Main extends Sprite
 
 		#if (cpp && windows)
 		backend.Native.fixScaling();
+		#end
+
+		#if android
+		CrashHandler.init();
 		#end
 
 		// Credits to MAJigsaw77 (he's the og author for this code)
