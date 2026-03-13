@@ -93,7 +93,7 @@ jobs:
         run: haxelib list
 
       - name: Compile Android
-        run: haxelib run lime build android -release --app-version="4.0.0-${{ github.run_id}}" -D officialBuild -64
+        run: haxelib run lime build android -release --app-version="4.0.0-${{ github.run_id}}" -D officialBuild -arm64
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
