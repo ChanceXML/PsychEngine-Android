@@ -1,4 +1,4 @@
-package;
+package android.utils;
 
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
