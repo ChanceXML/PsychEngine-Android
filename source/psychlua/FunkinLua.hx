@@ -1753,28 +1753,25 @@ class FunkinLua {
 	}
 
 	function findScript(scriptFile:String, ext:String = '.lua')
-	{
-		if(!scriptFile.endsWith(ext)) scriptFile += ext;
-		var path:String = Paths.getPath(scriptFile, TEXT);
-		#if MODS_ALLOWED
-		if(FileSystem.exists(path))
-		#else
-		if(Assets.exists(path, TEXT))
-		#end
-		{
-			return path;
-		}
-		#if MODS_ALLOWED
-		else if(FileSystem.exists(scriptFile))
-		#else
-		else if(Assets.exists(scriptFile, TEXT))
-		#end
-		{
-			return scriptFile;
-		}
-		return null;
-	}
+{
+    if (!scriptFile.endsWith(ext)) scriptFile += ext;
 
+    #if MODS_ALLOWED
+    var modPath:String = Paths.mods(scriptFile);
+    if (FileSystem.exists(modPath))
+        return modPath;
+    #end
+
+    var path:String = Paths.getPath(scriptFile, TEXT);
+    #if MODS_ALLOWED
+    if (FileSystem.exists(path))
+    #else
+    if (Assets.exists(path, TEXT))
+    #end
+        return path;
+
+    return null;
+}
 	public function getErrorMessage(status:Int):String {
 		var v:String = Lua.tostring(lua, -1);
 		Lua.pop(lua, 1);
