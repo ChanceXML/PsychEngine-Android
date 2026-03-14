@@ -93,7 +93,7 @@ jobs:
       - name: Build LuaJIT Android
         run: |
           cd ~/haxelib/linc_luajit/git
-          haxelib run lime rebuild linc_luajit android -arm64 -clean -verbose
+          haxelib run lime rebuild linc_luajit android -DANDROID_ARM64 -clean -verbose
       
       - name: Verify LuaJIT built
         run: |
