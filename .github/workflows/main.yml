@@ -94,13 +94,13 @@ jobs:
         run: |
          rm -rf ~/haxelib/linc_luajit/git/ndll/Android
          rm -rf ~/haxelib/linc_luajit/git/ndll/Android64
-         haxelib run lime rebuild linc_luajit android -clean -verbose
+         haxelib run lime rebuild linc_luajit android -arm64 -clean -verbose
 
       - name: Where Is Linc Luajit
         run: haxelib path linc_luajit
 
       - name: Compile Android
-        run: haxelib run lime build android -release --app-version="4.0.0-${{ github.run_id}}" -D officialBuild -arm64
+        run: haxelib run lime build android -release --app-version="4.0.0-${{ github.run_id}}" -D officialBuild -arm64 -DLUA_ALLOWED
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
