@@ -94,12 +94,13 @@ jobs:
 
       - name: Show installed libraries
         run: haxelib list
+        
       - name: hmm
         run: |
-         haxelib --global install hmm
-         haxelib --global run hmm setup
+         haxelib install hmm
+         haxelib run hmm setup
 
-      - name: Build
+      - name: build
       - run: haxelib run lime build android
 
       - name: Compile Android
