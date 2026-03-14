@@ -20,13 +20,15 @@ jobs:
       - name: Restore build cache
         uses: actions/cache@v4
         with:
-          key: android-build-cache
-          path: |
-            ~/.haxelib
-            ~/.hxcpp
-            export/release/android/haxe
-            export/release/android/obj
-
+         path: |
+          ~/.haxelib
+          ~/.hxcpp
+          export/release/android/haxe
+          export/release/android/obj
+         key: ${{ runner.os }}-android-${{ hashFiles('**/*.hx','**/*.xml','**/*.hxml') }}
+         restore-keys: |
+          ${{ runner.os }}-android-
+      
       - name: Install Linux build tools
         run: |
           sudo apt-get update
@@ -118,9 +120,9 @@ jobs:
       - name: Save build cache
         uses: actions/cache@v4
         with:
-          key: android-build-cache
-          path: |
-            ~/.haxelib
-            ~/.hxcpp
-            export/release/android/haxe
-            export/release/android/obj
+         path: |
+          ~/.haxelib
+          ~/.hxcpp
+          export/release/android/haxe
+          export/release/android/obj
+         key: ${{ runner.os }}-android-${{ hashFiles('**/*.hx','**/*.xml','**/*.hxml') }}
