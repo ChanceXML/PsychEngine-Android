@@ -8,7 +8,7 @@ on:
         description: "Build Name"
         required: true
         default: "Android Build"
-
+# woohoo
 jobs:
   buildAndroid:
     runs-on: ubuntu-latest
@@ -35,46 +35,44 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: zulu
+          java-version: 17
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
-      
+
       - name: Install Android NDK 21
         run: sdkmanager "ndk;21.4.7075529"
 
       - name: Set environment for HXCPP
         run: |
-         echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
-         echo "HXCPP_COMPILER=clang++" >> $GITHUB_ENV
-         echo "HXCPP_CFLAGS=-stdlib=libc++ -I/usr/include/c++/v1" >> $GITHUB_ENV
-         export PATH="$HOME/haxelib/bin:$PATH"
+          echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
+          echo "HXCPP_COMPILER=clang++" >> $GITHUB_ENV
+          echo "HXCPP_CFLAGS=-stdlib=libc++ -I/usr/include/c++/v1" >> $GITHUB_ENV
 
       - name: Set Android environment
         run: |
-         echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
-         echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529" >> $GITHUB_ENV
-         echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.4.7075529" >> $GITHUB_ENV
-         echo "PATH=$ANDROID_HOME/ndk/21.4.7075529/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
-         echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
-
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/21.4.7075529" >> $GITHUB_ENV
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/21.4.7075529" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_HOME/ndk/21.4.7075529/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
+      
       - name: Setup Haxe
         uses: krdlab/setup-haxe@v2
         with:
           haxe-version: 4.3.4
-
+      
       - name: Install Haxelib and HXCPP
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp 4.3.2 --quiet
           haxelib set hxcpp 4.3.2
-
+      
       - name: Run setup script
         run: |
           chmod +x ./setup/unix.sh
           ./setup/unix.sh
-
+          
       - name: Lime Setup Android
         run: |
           printf "%s\n%s\n%s\n" \
@@ -82,28 +80,34 @@ jobs:
             "$ANDROID_NDK_ROOT" \
             "$JAVA_HOME" \
             | haxelib run lime setup android
-
+            
       - name: Install Extension-AndroidTools
         run: haxelib git extension-androidtools https://github.com/LimeExtensions/extension-androidtools.git --skip-dependencies
+      - name: Install LuaJIT
+        run: |
+          rm -rf ~/haxelib/linc_luajit
+          haxelib git linc_luajit https://github.com/superpowers04/linc_luajit
+      
+      - name: Build LuaJIT Android
+        run: |
+          cd ~/haxelib/linc_luajit/git
+          haxelib run lime rebuild linc_luajit android -arm64 -clean -verbose
+      
+      - name: Verify LuaJIT built
+        run: |
+          find ~/haxelib/linc_luajit -name "*.so"
 
       - name: Haxelib List
         run: haxelib list
-
-      - name: Lua Things or whatever
-        run: |
-         rm -rf ~/haxelib/linc_luajit/git/ndll/Android
-         rm -rf ~/haxelib/linc_luajit/git/ndll/Android64
-         haxelib run lime rebuild linc_luajit android -arm64 -clean -verbose
-
-      - name: Where Is Linc Luajit
-        run: haxelib path linc_luajit
-
-      - name: Check LuaJIT files
-        run: |
-         find ~/haxelib/linc_luajit -name "*.so"
-
+      # building..
       - name: Compile Android
-        run: haxelib run lime build android -release --app-version="4.0.0-${{ github.run_id}}" -D officialBuild -arm64 -DLUA_ALLOWED
+        run: |
+          haxelib run lime build android \
+          -release \
+          -arm64 \
+          -DLUA_ALLOWED \
+          -D officialBuild \
+          --app-version="4.0.0-${{ github.run_id}}"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
