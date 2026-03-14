@@ -95,10 +95,6 @@ jobs:
           cd ~/haxelib/linc_luajit/git
           haxelib run lime rebuild linc_luajit android -DANDROID_ARM64 -clean -verbose
       
-      - name: Verify LuaJIT built
-        run: |
-          find ~/haxelib/linc_luajit -name "*.so"
-
       - name: Haxelib List
         run: haxelib list
       # building..
@@ -110,6 +106,10 @@ jobs:
           -DLUA_ALLOWED \
           -Dlinc_luajit_static \
           -D officialBuild
+
+      - name: Verify LuaJIT built
+        run: |
+          find ~/haxelib/linc_luajit -name "*.so"
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
