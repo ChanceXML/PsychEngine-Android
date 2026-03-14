@@ -101,7 +101,7 @@ jobs:
          haxelib run hmm setup
 
       - name: build
-      - run: haxelib run lime build android
+        run: haxelib run lime build android
 
       - name: Compile Android
         run: |
