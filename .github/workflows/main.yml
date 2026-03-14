@@ -108,9 +108,9 @@ jobs:
           -release \
           -arm64 \
           -DLUA_ALLOWED \
-          -D officialBuild \
-          --app-version="4.0.0-${{ github.run_id}}"
-
+          -Dlinc_luajit_static \
+          -D officialBuild
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
